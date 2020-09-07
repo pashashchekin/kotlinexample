@@ -3,6 +3,7 @@ package ru.skillbranch.kotlinexample
 import androidx.annotation.VisibleForTesting
 import ru.skillbranch.kotlinexample.extensions.isValidPhone
 import ru.skillbranch.kotlinexample.extensions.normalizePhone
+import kotlin.math.log
 
 object UserHolder {
     private val map = mutableMapOf<String, User>()
@@ -29,7 +30,7 @@ object UserHolder {
     }
 
     fun loginUser(login: String, password: String): String? {
-        return map[login.normalizePhone().trim()]?.let {
+        return map[validateLogin(login)]?.let {
             if (it.checkPassword(password)) it.userInfo
             else null
         }
@@ -38,6 +39,15 @@ object UserHolder {
     fun requestAccessCode(login: String) {
         map[login.normalizePhone()]?.requestAccessCode()
     }
+
+
+    private fun validateLogin(login: String): String {
+        return if (login.isValidPhone())
+            login.normalizePhone()
+        else
+            login.trim()
+    }
+
 
     @VisibleForTesting(otherwise = VisibleForTesting.NONE)
     fun clearHolder() {

@@ -1,6 +1,7 @@
 package ru.skillbranch.kotlinexample
 
 import androidx.annotation.VisibleForTesting
+import ru.skillbranch.kotlinexample.extensions.isValidPhone
 import ru.skillbranch.kotlinexample.extensions.normalizePhone
 import java.lang.StringBuilder
 import java.math.BigInteger
@@ -127,6 +128,8 @@ class User private constructor(
         return hexString.padStart(32, '0')
     }
 
+
+
     companion object Factory {
         fun makeUser(
             fullName: String,
@@ -161,5 +164,7 @@ class User private constructor(
                     }
                 }
         }
+
+
     }
 }
