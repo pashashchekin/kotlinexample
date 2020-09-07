@@ -1,4 +1,4 @@
-package ru.skillbranch.kotlinexample.utils
+package ru.skillbranch.kotlinexample.extensions
 
 fun String.normalizePhone() = replace("[^+\\d]".toRegex(), "")
 

@@ -1,7 +1,7 @@
 package ru.skillbranch.kotlinexample
 
 import androidx.annotation.VisibleForTesting
-import ru.skillbranch.kotlinexample.utils.normalizePhone
+import ru.skillbranch.kotlinexample.extensions.normalizePhone
 import java.lang.StringBuilder
 import java.math.BigInteger
 import java.security.MessageDigest

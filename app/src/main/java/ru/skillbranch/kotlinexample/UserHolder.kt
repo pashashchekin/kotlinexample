@@ -1,11 +1,11 @@
 package ru.skillbranch.kotlinexample
 
 import androidx.annotation.VisibleForTesting
-import ru.skillbranch.kotlinexample.utils.isValidPhone
-import ru.skillbranch.kotlinexample.utils.normalizePhone
+import ru.skillbranch.kotlinexample.extensions.isValidPhone
+import ru.skillbranch.kotlinexample.extensions.normalizePhone
 
 object UserHolder {
-    val map = mutableMapOf<String, User>()
+    private val map = mutableMapOf<String, User>()
 
     fun registerUser(fullName: String, email: String, password: String): User {
         if (map.containsKey(email.toLowerCase()))
