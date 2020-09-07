@@ -1,6 +1,7 @@
 package ru.skillbranch.kotlinexample
 
 import androidx.annotation.VisibleForTesting
+import ru.skillbranch.kotlinexample.utils.normalizePhone
 import java.lang.StringBuilder
 import java.math.BigInteger
 import java.security.MessageDigest
@@ -26,7 +27,7 @@ class User private constructor(
 
     private var phone: String? = null
         set(value) {
-            field = value?.replace("[^+\\d]".toRegex(), "")
+            field = value?.normalizePhone()
         }
 
     private var _login: String? = null
@@ -64,14 +65,13 @@ class User private constructor(
         println("Secondary phone constructor")
         val code = generateAccessCode()
         accessCode = code
-        sendAccessCodeToUser(rawPhone, code)
+        requestAccessCode()
     }
 
     init {
         println("First init block, primary constructor was called")
 
         check(!firstName.isBlank()) { "FirstName must be not blank" }
-        check(!email.isNullOrBlank() || rawPhone.isNullOrBlank()) { "Email or phone must be not blank" }
 
         phone = rawPhone
         login = email ?: phone!!
@@ -93,6 +93,13 @@ class User private constructor(
     fun changePassword(oldPass: String, newPass: String) {
         if (checkPassword(oldPass)) passwordHash = encrypt(newPass)
         else throw IllegalArgumentException("The entered password does not match the current password")
+    }
+
+    fun requestAccessCode(): String {
+        val code = generateAccessCode()
+        passwordHash = encrypt(code)
+        accessCode = code
+        return code
     }
 
     private fun encrypt(password: String): String = salt.plus(password).md5()
@@ -129,7 +136,7 @@ class User private constructor(
         ): User {
             val (firstName, lastName) = fullName.fullNameToPair()
             return when {
-                !phone.isNullOrBlank() -> User(firstName, lastName)
+                !phone.isNullOrBlank() -> User(firstName, lastName, phone)
                 !email.isNullOrBlank() && !password.isNullOrBlank() -> User(
                     firstName,
                     lastName,
